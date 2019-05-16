@@ -1,20 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<style>
+		body{
+       		 background: url(https://pp.userapi.com/c845020/v845020931/20c002/RtSvXZ-QG8k.jpg)
+
+		}
 		<meta charset="UTF-8">
-		<title> Awesome Anonimizer </title>
+		<title> Awesome Anonimizer </title
+		</style>
 	</head>
-<body>
+	<body>
 	<p><b> This is your best text anonimizer</b></p>
+	<p><b> Please, put your text here:</b> </p>
 	<form action="/anonimize_text" method=post>
-		{{ form[0].enter.label }} {{ form[0].enter(id='typed-text-field') }}
+	        {{ form[0].enter(id='typed-text-field') }}
 		{{ form[0].submit() }}
 	</form>
-
+	<p> <b>Here you will see your anonimized text</b> </p>
 	<form action="/anonimize_tex" method=get>
-		{{ form[1].enter.label }} {{ form[1].enter(id='typed-text-field') }}
+       	        {{ form[1].enter(id='typed-text-field') }}
 	</form>
 
 	
-</body>
+	</body>
 </html>
