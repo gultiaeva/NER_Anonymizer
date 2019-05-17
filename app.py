@@ -52,10 +52,11 @@ def home():
     enter2 = None
     form1 = TextForm1()
     form2 = TextForm2()
-    # if form1.validate_on_submit():
     if request.method == "POST":
-        form2.enter.data = form_answer(form1.enter.data) #формируем ответ in :string
-        # return redirect(url_for('anonimize'))
+        if "Unique_NER" in request.form:
+            form2.enter.data = form_answer(form1.enter.data) #формируем ответ in :string
+        elif "Natasha" in request.form:
+            form2.enter.data = "Do smth too"
     return render_template("index.html", form=[form1, form2],
                            enter=[enter1, enter2])
 
