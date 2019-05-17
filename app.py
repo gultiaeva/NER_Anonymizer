@@ -11,8 +11,13 @@ from flask import redirect
 from flask_wtf import Form
 from wtforms import TextAreaField, SubmitField
 from wtforms.validators import Required
-from processing.natashenka import recognize_all
+from processing.postprocessing import Predictor
+from joblib import load
+# from processing.natashenka import recognize_all
 
+
+with open('processing/binaries/LGBMClassifier.pkl', 'rb') as f:
+        classifier = pickle.load(f)
 
 app = flask.Flask(__name__)
 app.config['SECRET_KEY'] = "SOADISAHOIDLHWNEOIASLDNXOJASKBDOALSXANSLKXAIDNO"
@@ -43,7 +48,8 @@ def home():
     form2 = TextForm2()
     # if form1.validate_on_submit():
     if request.method == "POST":
-        form2.enter.data = recognize_all(form1.enter.data)
+        pred = Predictor(classifier, form1.enter.data)
+        form2.enter.data = pred.form_answer()   # формируем ответ in :string
         # return redirect(url_for('anonimize'))
     return render_template("index.html", form=[form1, form2],
                            enter=[enter1, enter2])
