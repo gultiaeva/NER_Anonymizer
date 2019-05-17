@@ -11,9 +11,20 @@ from flask import redirect
 from flask_wtf import Form
 from wtforms import TextAreaField, SubmitField
 from wtforms.validators import Required
-from processing.natashenka import recognize_all
+from processing.postprocessing import form_answer
+from joblib import load
+import pickle
+#from processing.natashenka import recognize_all
 
+encoders = [load('processing/binaries/part_of_speech_encoder.joblib'),
+            load('processing/binaries/gender_encoder.joblib'),
+            load('processing/binaries/quantity_encoder.joblib'),
+            load('processing/binaries/case_encoder.joblib'),
+            load("processing/binaries/class_encoder.joblib")]
 
+with open('processing/binaries/LGBMClassifier.pkl', 'rb') as f:
+    classifier = pickle.load(f)
+ 
 app = flask.Flask(__name__)
 app.config['SECRET_KEY'] = "SOADISAHOIDLHWNEOIASLDNXOJASKBDOALSXANSLKXAIDNO"
 
@@ -43,7 +54,7 @@ def home():
     form2 = TextForm2()
     # if form1.validate_on_submit():
     if request.method == "POST":
-        form2.enter.data = recognize_all(form1.enter.data)
+        form2.enter.data = form_answer(form1.enter.data) #формируем ответ in :string
         # return redirect(url_for('anonimize'))
     return render_template("index.html", form=[form1, form2],
                            enter=[enter1, enter2])
