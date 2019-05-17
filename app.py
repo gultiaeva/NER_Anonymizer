@@ -13,11 +13,13 @@ from wtforms import TextAreaField, SubmitField
 from wtforms.validators import Required
 from processing.postprocessing import Predictor
 from joblib import load
-# from processing.natashenka import recognize_all
+import pickle
+from processing.natashenka import recognize_all
 
 
 with open('processing/binaries/LGBMClassifier.pkl', 'rb') as f:
         classifier = pickle.load(f)
+pred = Predictor(classifier)
 
 app = flask.Flask(__name__)
 app.config['SECRET_KEY'] = "SOADISAHOIDLHWNEOIASLDNXOJASKBDOALSXANSLKXAIDNO"
@@ -48,10 +50,10 @@ def home():
     form2 = TextForm2()
     if request.method == "POST":
         if "Our solution" in request.form:
-            pred = Predictor(classifier, form1.enter.data)
+            pred.provide_data(form1.enter.data)
             form2.enter.data = pred.form_answer()   # формируем ответ in :string
         elif "Natasha" in request.form:
-            form2.enter.data = "Do smth too"
+            form2.enter.data = recognize_all(form1.enter.data)
     return render_template("index.html", form=[form1, form2],
                            enter=[enter1, enter2])
 

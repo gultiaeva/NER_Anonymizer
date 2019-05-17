@@ -1,8 +1,7 @@
 import numpy as np
 import pandas as pd
 from joblib import load
-#from processing.workers import Workers
-from workers import Workers
+from processing.workers import Workers
 import re
 
 
@@ -23,7 +22,7 @@ class DataPreprocessor():
         words = pd.DataFrame(string.split(), columns=['word'])
         lasts = pd.DataFrame(lasts, columns=['last_in_sentence'])
         self.df_for_model = pd.concat([words, lasts], axis=1)
-        self.words = df_words
+        self.df_words = words
 
     def _prepare_for_model(self, df):
         w2v_columns = [f'w2v_{i}' for i in range(1, 301)]
@@ -47,11 +46,11 @@ class DataPreprocessor():
         for encoder, name in zip(self.encoders, new_columns):
             df[name] = encoder.transform(df[name])
 
-        df = self.Worker.create_neighbours(df.values)
+        self.df_for_model = self.Worker.create_neighbours(df.values)
 
     def prepare(self):
-        if string[-1] != '.':
-            string = string + '.'
+        if self.input[-1] != '.':
+            self.input = self.input + '.'
 
         self._to_df(self.input)
         self._prepare_for_model(self.df_for_model)

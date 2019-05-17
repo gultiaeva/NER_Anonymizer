@@ -9,6 +9,7 @@ import nltk
 
 class Workers():
     def __init__(self):
+        nltk.download('stopwords')
         self.stopwords = nltk.corpus.stopwords.words('russian')
         print('Stopwords loaded!')
         self.morph = pymorphy2.MorphAnalyzer()
@@ -21,7 +22,7 @@ class Workers():
         return self.morph.normal_forms(word)[0]
 
     def normalize_text(self, text):
-        return ' '.join([get_normal_form(i) for i in re.findall('\w+', text)
+        return ' '.join([self.get_normal_form(i) for i in re.findall('\w+', text)
                         if i not in self.stopwords])
 
     def vectorize(self, text):
@@ -64,7 +65,7 @@ class Workers():
                 i = 0
 
     def is_first(self, words):
-        positions = np.array([i for i in self.my_gen(words)])
+        positions = np.array([i for i in self.words_generator(words)])
         return (positions == 0).astype(int)
 
     def create_neighbours(self, df):
