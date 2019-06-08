@@ -89,17 +89,10 @@ class Workers():
                 left.append(df[idx - 1])
                 right.append(df[idx + 1])
 
-        """left.columns = [f'prev_{col}' for col in left.columns]
-        right.columns = [f'next_{col}' for col in right.columns]
-
-        left = left.reset_index().drop('index', axis=1)
-        df = df.reset_index().drop('index', axis=1)
-        right = right.reset_index().drop('index', axis=1)"""
 
         left = pd.DataFrame(np.array(left))
         df = pd.DataFrame(np.array(df))
         right = pd.DataFrame(np.array(right))
 
-        # return left, df, right
-        # return np.hstack([np.hstack([left, df]), right])
+
         return pd.concat([pd.concat([left, df], axis=1), right], axis=1)
